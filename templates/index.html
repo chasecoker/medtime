@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+<!-- Ajax code to update page every 4000 milliseconds -->
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+$(function(){
+    window.setInterval(function(){
+        notifyUser()        
+    }, 4000)
+
+function notifyUser(){
+    $.ajax({
+        url:"/notify",
+        type: "POST",
+        dataType: "json",
+        success: function(data){
+            $(notify_user).replaceWith(data)
+        }        
+
+    });    
+}
+});
+</script>
+<div class="container">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="content">
+            <h1 style="text-align:center;">Medtime</h1>
+            <div class="d-flex justify-content-center"><img src="static/logo.png" style="max-width: 20%; height: auto;"></div>
+            <div class="jumbotron">
+            <table class="d-flex justify-content-center" style="border-collapse: separate; border-spacing: 40px 15px;">
+                <tr style="color:black;">
+                    <th colspan="3" class="text-center">Medication</th>
+                    <th colspan="3" class="text-center">Duration</th>
+                    <th colspan="3" class="text-center">Time Taken</th>
+                    <th colspan="2" class="text-center">Actions</th>
+                </tr>
+                {% for med in meds %}
+                    <tr style="color:rgb(99, 99, 99)">
+                        <td colspan="3" class="text-center">{{ med.medtype }}</td>
+                        <td colspan="3" class="text-center">{{ med.duration }} min</td>
+                        <td colspan="3" class="text-center">{{ med.time_created.time().strftime("%H:%M") }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                            <a href="/delete/{{med.id}}" class="btn btn=default btn-xs btn-outline-secondary">Delete</a>
+                            <a href="/take/{{med.id}}" class="btn btn=default btn-sm btn-outline-secondary">Take Medication</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+                <div class="input-group input-group-sm d-flex justify-content-center">
+                <form action="/" method="POST">
+                    <input type="text" name="medication" id="medication" placeholder="medication">
+                    <br>
+                    <input type="text" name="interval" id="interval" placeholder="duration in minutes"> 
+                    <div class="input-group-append">
+                        <input type="submit" value="Add Medication" class="btn btn-outline-secondary">  
+                    </div>    
+                </form>
+                </div>
+            </div>
+        </div>    
+    </div>    
+        <div id="notify_user" class="d-flex justify-content-center">
+            <table>
+                <tr>
+                    <th>Medication To Take</th>
+                </tr>
+                {% for y in x %}
+                    <tr class="text-danger" style="text-align:center;">
+                        <td>{{ y }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+</div>
+{% endblock %}

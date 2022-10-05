@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+<div id="notify_user" class="d-flex justify-content-center">
+    <table>
+        <tr>
+            <th>Medication To Take</th>
+        </tr>
+        {% for y in x %}
+            <tr class="text-danger" style="text-align:center;">
+                <td>{{ y }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
